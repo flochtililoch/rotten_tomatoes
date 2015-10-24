@@ -54,7 +54,7 @@
         return 30;
         
     }
-    return 124;
+    return 130;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -66,6 +66,8 @@
     
     cell.titleLabel.text = self.movies[indexPath.row][@"title"];
     cell.synopsisLabel.text = self.movies[indexPath.row][@"synopsis"];
+    [cell.criticsImageView setImage:[UIImage imageNamed: self.movies[indexPath.row][@"ratings"][@"critics_rating"]]];
+    [cell.audienceImageView setImage:[UIImage imageNamed: self.movies[indexPath.row][@"ratings"][@"audience_rating"]]];
 
     NSURL *url = [NSURL URLWithString:self.movies[indexPath.row][@"posters"][@"thumbnail"]];
     [cell.artworkImageView fadeInImageView:cell.artworkImageView
@@ -80,6 +82,10 @@
     MovieDetailsViewController *vc = [segue destinationViewController];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
     [vc setMovie:[self.movies objectAtIndex:indexPath.row]];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -123,8 +129,14 @@
 # pragma - UI helpers
 
 - (void)initUI {
+    // Navigation
     self.title = @"Movies";
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.barTintColor = [UIColor darkGrayColor];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];;
     
+    // Loading
     [self.loadingIndicator startAnimating];
     [self.refreshControl addTarget:self
                             action:@selector(fetchMovies)
@@ -149,8 +161,8 @@
 - (UIRefreshControl *)refreshControl {
     if(!_refreshControl) {
         _refreshControl = [[UIRefreshControl alloc] init];
-        _refreshControl.backgroundColor = [UIColor blackColor];
-        _refreshControl.tintColor = [UIColor whiteColor];
+        _refreshControl.backgroundColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1.0];
+        _refreshControl.tintColor = [UIColor darkGrayColor];
         [_tableView addSubview:_refreshControl];
     }
     return _refreshControl;

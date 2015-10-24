@@ -8,11 +8,14 @@
 
 #import "UIImageView+FadeIn.h"
 #import "MovieDetailsViewController.h"
-#import "MovieArtworkTableViewCell.h"
-#import "MovieRatingTableViewCell.h"
 #import "MovieSynopsisTableViewCell.h"
-#import "MovieCastTableViewCell.h"
-#import "MovieMiscTableViewCell.h"
+
+// Sections
+static const NSInteger kRatingsSectionId = 0;
+static const NSInteger kSynopsisSectionId = 1;
+static const NSInteger kCastSectionId = 2;
+static const NSInteger kMiscSectionId = 3;
+
 
 @interface MovieDetailsViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -37,10 +40,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 
-    
-    self.title = self.movie[@"title"];
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 44.0;
+    [self initUI];
 }
 
 # pragma - Data
@@ -55,21 +55,31 @@
 # pragma - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return 4;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *sectionHeader = [[UIView alloc] init];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(15, 5, 320, 20)];
+    label.font = [label.font fontWithSize:12];
+    label.text = @[@"Ratings", @"Synopsis", @"Cast", @"Misc"][section];
+    sectionHeader.backgroundColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1.0];
+    [sectionHeader addSubview:label];
+    
+    return sectionHeader;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger numberOfRows = 0;
     
-    if (section == 0) {
-        numberOfRows = 1;
-    } else if (section == 1) {
+    if (section == kRatingsSectionId) {
         numberOfRows = 3;
-    } else if (section == 2) {
+    } else if (section == kSynopsisSectionId) {
         numberOfRows = 1;
-    } else if (section == 3) {
+    } else if (section == kCastSectionId) {
         numberOfRows = self.cast.count;
-    } else {
+    } else if (section == kMiscSectionId) {
         numberOfRows = 2;
     }
     return numberOfRows;
@@ -77,127 +87,137 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return 320;
-
-    } else if (indexPath.section == 2) {
+    if (indexPath.section == kSynopsisSectionId) {
         
         // Auto Size Synopsis Label (which happens to be a pain since within a UITableViewCell)
         // http://stackoverflow.com/a/19135591/237637
         // http://doing-it-wrong.mikeweller.com/2012/07/youre-doing-it-wrong-2-sizing-labels.html
         // eh
         UILabel *label = [[UILabel alloc] init];
-        label.font = [UIFont systemFontOfSize:17];
+        label.font = [UIFont systemFontOfSize:13];
         label.text = self.movie[@"synopsis"];
         label.numberOfLines = 0;
-        CGSize expectedSize = [label sizeThatFits:CGSizeMake(320, MAXFLOAT)];
+        CGSize expectedSize = [label sizeThatFits:CGSizeMake(297, MAXFLOAT)];
+        CGFloat labelMargins = 16.0f;
         
-        return expectedSize.height;
+        return expectedSize.height + labelMargins;
     }
     
     return 44;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSArray *sectionCells = @[@"defaultCell", @"synopsisCell", @"detailCell", @"defaultCell"];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:sectionCells[indexPath.section]];
 
-    // Artwork
-    if (indexPath.section == 0) {
-        
-        MovieArtworkTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"artworkCell"];
-        
-        // Hack: generate valid URL from thumbnail URL
-        NSURL *artworkThumbnailUrl = [NSURL URLWithString:self.movie[@"posters"][@"thumbnail"]];
-        NSURL *artworkFullsizeUrl = [NSURL URLWithString:
-                                        [NSString stringWithFormat: @"%@://%@/%@/%@/%@/%@/%@",
-                                                  artworkThumbnailUrl.scheme, @"content6.flixster.com",
-                                                  artworkThumbnailUrl.pathComponents[4],
-                                                  artworkThumbnailUrl.pathComponents[5],
-                                                  artworkThumbnailUrl.pathComponents[6],
-                                                  artworkThumbnailUrl.pathComponents[7],
-                                                  artworkThumbnailUrl.pathComponents[8]]];
-        
-
-        [(UIImageView *) cell.artworkImageView setImageWithURL:artworkThumbnailUrl];
-        [(UIImageView *) cell.artworkImageView setImageWithURL:artworkFullsizeUrl];
-
-        //  Assessment requirement say "All" images should fade in when not cached yet.
-        //  But the visual effect is rather unpleasant when we display first the thumbnail while loading the hi-res
-        //  Replaced code below with line above to prevent that.
-        //  [(UIImageView *) cell.artworkImageView fadeInImageView:cell.artworkImageView
-        //                                                     url:artworkFullsizeUrl
-        //                                              errorImage:[UIImage imageNamed:@"placeholder-2"]
-        //                                        placeholderImage:nil];
-
-        return cell;
-       
     // Ratings
-    } else if (indexPath.section == 1) {
+    if (indexPath.section == kRatingsSectionId) {
         
-        MovieRatingTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"ratingCell"];
+        cell.textLabel.text = @[@"MPAA", @"Audience", @"Critics"][indexPath.row];
         
-        
-        cell.ratingTypeLabel.text = @[@"MPAA", @"Audience", @"Critics"][indexPath.row];
-
-        // MPAA
+        NSString *rating;
         if (indexPath.row == 0) {
-            
-            cell.ratingValueLabel.text = self.movie[@"mpaa_rating"];
-
-        // Audience & Critics
+            rating = self.movie[@"mpaa_rating"];
         } else {
-            
-            NSInteger keyIndex = indexPath.row - 1;
-
-            NSString *ratingValue = [self.percentageFormatter stringFromNumber:self.movie[@"ratings"][@[@"audience_score", @"critics_score"][keyIndex]]];
-            UIImage *ratingImage = [UIImage imageNamed: self.movie[@"ratings"][@[@"critics_rating", @"audience_rating"][keyIndex]]];
-            
-            cell.ratingValueLabel.text = ratingValue;
-            [cell.ratingImageView setImage:ratingImage];
+            rating = [self.percentageFormatter stringFromNumber:self.movie[@"ratings"][@[@"mpaa_rating", @"audience_score", @"critics_score"][indexPath.row]]];
         }
-        
-        return cell;
+        cell.detailTextLabel.text = rating;
     
     // Synopsis
-    } else if (indexPath.section == 2) {
+    } else if (indexPath.section == kSynopsisSectionId) {
         
-        MovieSynopsisTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"synopsisCell"];
-        cell.synopsisLabel.text = self.movie[@"synopsis"];
-        cell.synopsisLabel.frame = cell.contentView.frame;
-//        cell.synopsisLabel.numberOfLines = 0;
-//        cell.synopsisLabel.lineBreakMode = NSLineBreakByWordWrapping;
-
-
-        return cell;
+        MovieSynopsisTableViewCell *synopsisCell = (MovieSynopsisTableViewCell *)cell;
+        synopsisCell.synopsisLabel.text = self.movie[@"synopsis"];
+        cell = synopsisCell;
 
     // Cast
-    } else if (indexPath.section == 3) {
+    } else if (indexPath.section == kCastSectionId) {
         
-        MovieCastTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"castCell"];
-        cell.castLabel.text = self.cast[indexPath.row][@"name"];
-        
-        return cell;
+        cell.textLabel.text = self.cast[indexPath.row][@"name"];
+        NSArray *characters = (NSArray *)self.cast[indexPath.row][@"characters"];
+        cell.detailTextLabel.text = [characters componentsJoinedByString: @", "];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
     // Misc
-    } else {
-        
-        MovieMiscTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"miscCell"];
+    } else if (indexPath.section == kMiscSectionId) {
         
         if (indexPath.row == 0) {
-            cell.miscLabel.text = @"Duration";
-            cell.miscValue.text = [self durationFormatter:self.movie[@"runtime"]];
+            cell.textLabel.text = @"Duration";
+            cell.detailTextLabel.text = [self durationFormatter:self.movie[@"runtime"]];
         } else {
-            cell.miscLabel.text = @"Release Date";
+            cell.textLabel.text = @"Release Date";
             [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
             NSDate *date = [self.dateFormatter dateFromString:self.movie[@"release_dates"][@"theater"]];
             [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-            cell.miscValue.text = [self.dateFormatter stringFromDate:date];
+            cell.detailTextLabel.text = [self.dateFormatter stringFromDate:date];
         }
-
-        return cell;
-
     }
-
+    
+    return cell;
 }
+
+
+# pragma - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == kCastSectionId) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        // Prepare Wikipedia URL. Replace spaces by underscores
+        NSString *name = self.cast[indexPath.row][@"name"];
+        NSError *error = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\s" options:NSRegularExpressionCaseInsensitive error:&error];
+        NSString *urlReadyName = [regex stringByReplacingMatchesInString:name
+                                                                 options:0
+                                                                   range:NSMakeRange(0, [name length])
+                                                            withTemplate:@"_"];
+        
+        NSURL *url = [NSURL URLWithString:[@"https://en.wikipedia.org/wiki/" stringByAppendingString:urlReadyName]];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
+
+#pragma mark - UI
+
+- (void)initUI {
+    // Navigation
+    self.title = self.movie[@"title"];
+    
+    // Table
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 44.0;
+    
+    // Hack: generate valid URL from thumbnail URL
+    NSURL *artworkThumbnailUrl = [NSURL URLWithString:self.movie[@"posters"][@"thumbnail"]];
+    NSURL *artworkFullsizeUrl = [NSURL URLWithString:
+                                 [NSString stringWithFormat: @"%@://%@/%@/%@/%@/%@/%@",
+                                  artworkThumbnailUrl.scheme, @"content6.flixster.com",
+                                  artworkThumbnailUrl.pathComponents[4],
+                                  artworkThumbnailUrl.pathComponents[5],
+                                  artworkThumbnailUrl.pathComponents[6],
+                                  artworkThumbnailUrl.pathComponents[7],
+                                  artworkThumbnailUrl.pathComponents[8]]];
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 474)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:headerView.frame];
+    [imageView setImageWithURL:artworkThumbnailUrl];
+    [imageView setImageWithURL:artworkFullsizeUrl];
+    
+    //  Assessment requirement say "All" images should fade in when not cached yet.
+    //  But the visual effect is rather unpleasant when we display first the thumbnail while loading the hi-res
+    //  Replaced code below with line above to prevent that.
+    //  [imageView fadeInImageView:artworkCell.artworkImageView
+    //                         url:artworkFullsizeUrl
+    //                  errorImage:[UIImage imageNamed:@"error"]
+    //            placeholderImage:nil];
+
+    [headerView addSubview:imageView];
+    self.tableView.tableHeaderView = headerView;
+}
+
 
 #pragma mark - Utils
 

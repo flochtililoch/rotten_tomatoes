@@ -11,11 +11,7 @@
 		4A6678631BDB578A00BC821B /* UIImageView+FadeIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6678621BDB578A00BC821B /* UIImageView+FadeIn.m */; };
 		4A78362B1BDAFF9100B55EBA /* MovieDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A78362A1BDAFF9100B55EBA /* MovieDetailsViewController.m */; };
 		4A7836301BDB02F000B55EBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A78362E1BDB02F000B55EBA /* Main.storyboard */; };
-		4A7836331BDB038C00B55EBA /* MovieArtworkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7836321BDB038C00B55EBA /* MovieArtworkTableViewCell.m */; };
-		4A7836371BDB04CF00B55EBA /* MovieRatingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7836361BDB04CF00B55EBA /* MovieRatingTableViewCell.m */; };
 		4A78363A1BDB04E900B55EBA /* MovieSynopsisTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7836391BDB04E900B55EBA /* MovieSynopsisTableViewCell.m */; };
-		4A78363D1BDB04F900B55EBA /* MovieCastTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A78363C1BDB04F900B55EBA /* MovieCastTableViewCell.m */; };
-		4A7836401BDB050700B55EBA /* MovieMiscTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A78363F1BDB050700B55EBA /* MovieMiscTableViewCell.m */; };
 		4A8D36B91BDAF7B700328B46 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D36B81BDAF7B700328B46 /* main.m */; };
 		4A8D36BC1BDAF7B700328B46 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D36BB1BDAF7B700328B46 /* AppDelegate.m */; };
 		4A8D36BF1BDAF7B700328B46 /* MoviesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D36BE1BDAF7B700328B46 /* MoviesViewController.m */; };
@@ -30,16 +26,8 @@
 		4A7836291BDAFF9100B55EBA /* MovieDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailsViewController.h; sourceTree = "<group>"; };
 		4A78362A1BDAFF9100B55EBA /* MovieDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailsViewController.m; sourceTree = "<group>"; };
 		4A78362F1BDB02F000B55EBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		4A7836311BDB038C00B55EBA /* MovieArtworkTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieArtworkTableViewCell.h; sourceTree = "<group>"; };
-		4A7836321BDB038C00B55EBA /* MovieArtworkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieArtworkTableViewCell.m; sourceTree = "<group>"; };
-		4A7836351BDB04CF00B55EBA /* MovieRatingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieRatingTableViewCell.h; sourceTree = "<group>"; };
-		4A7836361BDB04CF00B55EBA /* MovieRatingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieRatingTableViewCell.m; sourceTree = "<group>"; };
 		4A7836381BDB04E900B55EBA /* MovieSynopsisTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieSynopsisTableViewCell.h; sourceTree = "<group>"; };
 		4A7836391BDB04E900B55EBA /* MovieSynopsisTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieSynopsisTableViewCell.m; sourceTree = "<group>"; };
-		4A78363B1BDB04F900B55EBA /* MovieCastTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieCastTableViewCell.h; sourceTree = "<group>"; };
-		4A78363C1BDB04F900B55EBA /* MovieCastTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieCastTableViewCell.m; sourceTree = "<group>"; };
-		4A78363E1BDB050700B55EBA /* MovieMiscTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieMiscTableViewCell.h; sourceTree = "<group>"; };
-		4A78363F1BDB050700B55EBA /* MovieMiscTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieMiscTableViewCell.m; sourceTree = "<group>"; };
 		4A8D36B41BDAF7B700328B46 /* RottenTomatoes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RottenTomatoes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A8D36B81BDAF7B700328B46 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4A8D36BA1BDAF7B700328B46 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -99,18 +87,10 @@
 		4A7836341BDB048500B55EBA /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
-				4A7836351BDB04CF00B55EBA /* MovieRatingTableViewCell.h */,
-				4A7836361BDB04CF00B55EBA /* MovieRatingTableViewCell.m */,
 				4A7836381BDB04E900B55EBA /* MovieSynopsisTableViewCell.h */,
 				4A7836391BDB04E900B55EBA /* MovieSynopsisTableViewCell.m */,
-				4A78363B1BDB04F900B55EBA /* MovieCastTableViewCell.h */,
-				4A78363C1BDB04F900B55EBA /* MovieCastTableViewCell.m */,
-				4A78363E1BDB050700B55EBA /* MovieMiscTableViewCell.h */,
-				4A78363F1BDB050700B55EBA /* MovieMiscTableViewCell.m */,
 				4ACAB4831BDAFAB6004960B1 /* MovieTableViewCell.h */,
 				4ACAB4841BDAFAB6004960B1 /* MovieTableViewCell.m */,
-				4A7836311BDB038C00B55EBA /* MovieArtworkTableViewCell.h */,
-				4A7836321BDB038C00B55EBA /* MovieArtworkTableViewCell.m */,
 			);
 			name = "Table Cells";
 			sourceTree = "<group>";
@@ -277,12 +257,8 @@
 				4A78363A1BDB04E900B55EBA /* MovieSynopsisTableViewCell.m in Sources */,
 				4A8D36BC1BDAF7B700328B46 /* AppDelegate.m in Sources */,
 				4A6678631BDB578A00BC821B /* UIImageView+FadeIn.m in Sources */,
-				4A7836401BDB050700B55EBA /* MovieMiscTableViewCell.m in Sources */,
-				4A78363D1BDB04F900B55EBA /* MovieCastTableViewCell.m in Sources */,
 				4ACAB4851BDAFAB6004960B1 /* MovieTableViewCell.m in Sources */,
 				4A8D36B91BDAF7B700328B46 /* main.m in Sources */,
-				4A7836331BDB038C00B55EBA /* MovieArtworkTableViewCell.m in Sources */,
-				4A7836371BDB04CF00B55EBA /* MovieRatingTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
