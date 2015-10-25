@@ -6,6 +6,7 @@
 //  Copyright © 2015 flochtililoch. All rights reserved.
 //
 
+#import "Movies.h"
 #import "UIImageView+FadeIn.h"
 #import "MoviesViewController.h"
 #import "MovieDetailsViewController.h"
@@ -15,13 +16,14 @@
 
 // Outlets
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 // UI
 @property (strong, nonatomic) UIActivityIndicatorView *loadingIndicator;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 // State
-@property (strong, nonatomic) NSArray *movies;
+@property (strong, nonatomic) Movies *movies;
 @property (nonatomic) BOOL hasError;
 
 @end
@@ -36,6 +38,36 @@
 
     [self initUI];
     [self fetchMovies];
+}
+
+
+# pragma - Model
+
+- (Movies *)movies {
+    if(!_movies) {
+        _movies = [[Movies alloc] init];
+    }
+    return _movies;
+}
+
+- (void)fetchMovies {
+    [self.refreshControl beginRefreshing];
+    
+    void (^successHandler)() = ^void() {
+        [self.loadingIndicator stopAnimating];
+        [self.refreshControl endRefreshing];
+        self.hasError = NO;
+        [self.tableView reloadData];
+    };
+    
+    void (^errorHandler)() = ^void() {
+        [self.loadingIndicator stopAnimating];
+        [self.refreshControl endRefreshing];
+        self.hasError = YES;
+        [self.tableView reloadData];
+    };
+    
+    [self.movies fetch:successHandler error:errorHandler];
 }
 
 
@@ -62,16 +94,15 @@
         return [self.tableView dequeueReusableCellWithIdentifier:@"errorCell"];
     }
     
+    Movie *movie = [self.movies objectAtIndex:indexPath.row];
     MovieTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"movieCell"];
     
-    cell.titleLabel.text = self.movies[indexPath.row][@"title"];
-    cell.synopsisLabel.text = self.movies[indexPath.row][@"synopsis"];
-    [cell.criticsImageView setImage:[UIImage imageNamed: self.movies[indexPath.row][@"ratings"][@"critics_rating"]]];
-    [cell.audienceImageView setImage:[UIImage imageNamed: self.movies[indexPath.row][@"ratings"][@"audience_rating"]]];
-
-    NSURL *url = [NSURL URLWithString:self.movies[indexPath.row][@"posters"][@"thumbnail"]];
+    cell.titleLabel.text = movie.title;
+    cell.synopsisLabel.text = movie.synopsis;
+    [cell.criticsImageView setImage:[UIImage imageNamed: movie.criticsRatingImageName]];
+    [cell.audienceImageView setImage:[UIImage imageNamed: movie.audienceRatingImageName]];
     [cell.artworkImageView fadeInImageView:cell.artworkImageView
-                                       url:url
+                                       url:movie.artworkThumbnailUrl
                                 errorImage:[UIImage imageNamed:@"error"]
                           placeholderImage:nil];
     
@@ -86,43 +117,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-
-# pragma - State helpers
-
-- (void)fetchMovies {
-    [self.refreshControl beginRefreshing];
-    
-    NSString *urlString = @"https://gist.githubusercontent.com/timothy1ee/d1778ca5b944ed974db0/raw/489d812c7ceeec0ac15ab77bf7c47849f2d1eb2b/gistfile1.json";
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
-                                                          delegate:nil
-                                                     delegateQueue:[NSOperationQueue mainQueue]];
-    
-    void (^completionHandler)(NSData *data, NSURLResponse *response, NSError *error) = ^void(NSData *data, NSURLResponse *response, NSError *error) {
-        [self.loadingIndicator stopAnimating];
-        [self.refreshControl endRefreshing];
-        
-        if (!error) {
-            self.hasError = NO;
-            NSError *jsonError = nil;
-            NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data
-                                                                               options:kNilOptions
-                                                                                 error:&jsonError];
-            NSLog(@"Response: %@", responseDictionary);
-            self.movies = responseDictionary[@"movies"];
-        } else {
-            self.hasError = YES;
-            NSLog(@"An error occurred: %@", error.description);
-        }
-
-        [self.tableView reloadData];
-    };
-    
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:completionHandler];
-    [task resume];
 }
 
 

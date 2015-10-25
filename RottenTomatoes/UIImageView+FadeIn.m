@@ -17,11 +17,11 @@
 
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     void (^imageFadeIn)(NSURLRequest *request , NSHTTPURLResponse *response , id image) = ^void(NSURLRequest *request, NSHTTPURLResponse *response, id image) {
+        if ([image class] != [UIImage class]) {
+            image = errorImage;
+        }
+        [imageView setImage:image];
         if(response != nil) {
-            if ([image class] != [UIImage class]) {
-                image = errorImage;
-            }
-            [imageView setImage:image];
             imageView.alpha = 0;
             [UIView beginAnimations:@"fade in" context:nil];
             [UIView setAnimationDuration:.5];

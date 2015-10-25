@@ -18,6 +18,8 @@
 		4A8D36C41BDAF7B700328B46 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A8D36C31BDAF7B700328B46 /* Assets.xcassets */; };
 		4A8D36C71BDAF7B700328B46 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A8D36C51BDAF7B700328B46 /* LaunchScreen.storyboard */; };
 		4ACAB4851BDAFAB6004960B1 /* MovieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACAB4841BDAFAB6004960B1 /* MovieTableViewCell.m */; };
+		4AD583351BDC3AF100D28938 /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD583341BDC3AF100D28938 /* Movie.m */; };
+		4AD583381BDC3B2D00D28938 /* Movies.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AD583371BDC3B2D00D28938 /* Movies.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,10 @@
 		4A8D36C81BDAF7B700328B46 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4ACAB4831BDAFAB6004960B1 /* MovieTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieTableViewCell.h; sourceTree = "<group>"; };
 		4ACAB4841BDAFAB6004960B1 /* MovieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieTableViewCell.m; sourceTree = "<group>"; };
+		4AD583331BDC3AF100D28938 /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
+		4AD583341BDC3AF100D28938 /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
+		4AD583361BDC3B2D00D28938 /* Movies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movies.h; sourceTree = "<group>"; };
+		4AD583371BDC3B2D00D28938 /* Movies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movies.m; sourceTree = "<group>"; };
 		7F9AE1E293112DAD119D3FC1 /* libPods-RottenTomatoes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RottenTomatoes.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5CCB4A8064DAC3A699A065A /* Pods-RottenTomatoes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RottenTomatoes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RottenTomatoes/Pods-RottenTomatoes.debug.xcconfig"; sourceTree = "<group>"; };
 		FAD4B64AA73140613C8201CD /* Pods-RottenTomatoes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RottenTomatoes.release.xcconfig"; path = "Pods/Target Support Files/Pods-RottenTomatoes/Pods-RottenTomatoes.release.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +128,7 @@
 				4A8D36C31BDAF7B700328B46 /* Assets.xcassets */,
 				4A8D36C51BDAF7B700328B46 /* LaunchScreen.storyboard */,
 				4A8D36C81BDAF7B700328B46 /* Info.plist */,
+				4AD583321BDC3AD500D28938 /* Model */,
 				4A6678651BDB612800BC821B /* View Controllers */,
 				4A7836341BDB048500B55EBA /* Table Cells */,
 				4A6678641BDB611C00BC821B /* Categories */,
@@ -136,6 +143,17 @@
 				4A8D36B81BDAF7B700328B46 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4AD583321BDC3AD500D28938 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4AD583331BDC3AF100D28938 /* Movie.h */,
+				4AD583341BDC3AF100D28938 /* Movie.m */,
+				4AD583361BDC3B2D00D28938 /* Movies.h */,
+				4AD583371BDC3B2D00D28938 /* Movies.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		F5E3133EDE9447502D0B3B64 /* Pods */ = {
@@ -180,6 +198,7 @@
 				TargetAttributes = {
 					4A8D36B31BDAF7B700328B46 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 56WVAU5YA6;
 					};
 				};
 			};
@@ -254,9 +273,11 @@
 			files = (
 				4A78362B1BDAFF9100B55EBA /* MovieDetailsViewController.m in Sources */,
 				4A8D36BF1BDAF7B700328B46 /* MoviesViewController.m in Sources */,
+				4AD583351BDC3AF100D28938 /* Movie.m in Sources */,
 				4A78363A1BDB04E900B55EBA /* MovieSynopsisTableViewCell.m in Sources */,
 				4A8D36BC1BDAF7B700328B46 /* AppDelegate.m in Sources */,
 				4A6678631BDB578A00BC821B /* UIImageView+FadeIn.m in Sources */,
+				4AD583381BDC3B2D00D28938 /* Movies.m in Sources */,
 				4ACAB4851BDAFAB6004960B1 /* MovieTableViewCell.m in Sources */,
 				4A8D36B91BDAF7B700328B46 /* main.m in Sources */,
 			);
@@ -371,10 +392,14 @@
 			baseConfigurationReference = B5CCB4A8064DAC3A699A065A /* Pods-RottenTomatoes.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = RottenTomatoes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.flochtililoch.RottenTomatoes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -383,10 +408,14 @@
 			baseConfigurationReference = FAD4B64AA73140613C8201CD /* Pods-RottenTomatoes.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = RottenTomatoes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.flochtililoch.RottenTomatoes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

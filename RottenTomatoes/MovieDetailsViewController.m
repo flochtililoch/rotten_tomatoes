@@ -22,9 +22,6 @@ static const NSInteger kMiscSectionId = 3;
 // Outlets
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-// Data
-@property (strong, nonatomic) NSArray *cast;
-
 // Utils
 @property (strong, nonatomic) NSNumberFormatter *percentageFormatter;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
@@ -43,14 +40,6 @@ static const NSInteger kMiscSectionId = 3;
     [self initUI];
 }
 
-# pragma - Data
-
-- (NSArray *)cast {
-    if (!_cast) {
-        _cast = self.movie[@"abridged_cast"];
-    }
-    return _cast;
-}
 
 # pragma - UITableViewDataSource
 
@@ -78,7 +67,7 @@ static const NSInteger kMiscSectionId = 3;
     } else if (section == kSynopsisSectionId) {
         numberOfRows = 1;
     } else if (section == kCastSectionId) {
-        numberOfRows = self.cast.count;
+        numberOfRows = self.movie.cast.count;
     } else if (section == kMiscSectionId) {
         numberOfRows = 2;
     }
@@ -95,7 +84,7 @@ static const NSInteger kMiscSectionId = 3;
         // eh
         UILabel *label = [[UILabel alloc] init];
         label.font = [UIFont systemFontOfSize:13];
-        label.text = self.movie[@"synopsis"];
+        label.text = self.movie.synopsis;
         label.numberOfLines = 0;
         CGSize expectedSize = [label sizeThatFits:CGSizeMake(297, MAXFLOAT)];
         CGFloat labelMargins = 16.0f;
@@ -118,24 +107,31 @@ static const NSInteger kMiscSectionId = 3;
         
         NSString *rating;
         if (indexPath.row == 0) {
-            rating = self.movie[@"mpaa_rating"];
+            rating = self.movie.mpaaRating;
         } else {
-            rating = [self.percentageFormatter stringFromNumber:self.movie[@"ratings"][@[@"mpaa_rating", @"audience_score", @"critics_score"][indexPath.row]]];
+            NSNumber *score = [[NSNumber alloc] init];
+            if (indexPath.row == 1) {
+                score = self.movie.audienceScore;
+            } else if (indexPath.row == 2) {
+                score = self.movie.criticsScore;
+            }
+            rating = [self.percentageFormatter stringFromNumber:score];
         }
+        
         cell.detailTextLabel.text = rating;
     
     // Synopsis
     } else if (indexPath.section == kSynopsisSectionId) {
         
         MovieSynopsisTableViewCell *synopsisCell = (MovieSynopsisTableViewCell *)cell;
-        synopsisCell.synopsisLabel.text = self.movie[@"synopsis"];
+        synopsisCell.synopsisLabel.text = self.movie.synopsis;
         cell = synopsisCell;
 
     // Cast
     } else if (indexPath.section == kCastSectionId) {
         
-        cell.textLabel.text = self.cast[indexPath.row][@"name"];
-        NSArray *characters = (NSArray *)self.cast[indexPath.row][@"characters"];
+        cell.textLabel.text = self.movie.cast[indexPath.row][@"name"];
+        NSArray *characters = (NSArray *)self.movie.cast[indexPath.row][@"characters"];
         cell.detailTextLabel.text = [characters componentsJoinedByString: @", "];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
@@ -144,13 +140,11 @@ static const NSInteger kMiscSectionId = 3;
         
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Duration";
-            cell.detailTextLabel.text = [self durationFormatter:self.movie[@"runtime"]];
+            cell.detailTextLabel.text = [self durationFormatter:self.movie.runtime];
         } else {
             cell.textLabel.text = @"Release Date";
-            [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
-            NSDate *date = [self.dateFormatter dateFromString:self.movie[@"release_dates"][@"theater"]];
             [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-            cell.detailTextLabel.text = [self.dateFormatter stringFromDate:date];
+            cell.detailTextLabel.text = [self.dateFormatter stringFromDate:self.movie.theaterReleaseDate];
         }
     }
     
@@ -166,7 +160,7 @@ static const NSInteger kMiscSectionId = 3;
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
         // Prepare Wikipedia URL. Replace spaces by underscores
-        NSString *name = self.cast[indexPath.row][@"name"];
+        NSString *name = self.movie.cast[indexPath.row][@"name"];
         NSError *error = nil;
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\s" options:NSRegularExpressionCaseInsensitive error:&error];
         NSString *urlReadyName = [regex stringByReplacingMatchesInString:name
@@ -180,37 +174,26 @@ static const NSInteger kMiscSectionId = 3;
 }
 
 
-#pragma mark - UI
+#pragma - UI
 
 - (void)initUI {
     // Navigation
-    self.title = self.movie[@"title"];
+    self.title = self.movie.title;
     
     // Table
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44.0;
     
-    // Hack: generate valid URL from thumbnail URL
-    NSURL *artworkThumbnailUrl = [NSURL URLWithString:self.movie[@"posters"][@"thumbnail"]];
-    NSURL *artworkFullsizeUrl = [NSURL URLWithString:
-                                 [NSString stringWithFormat: @"%@://%@/%@/%@/%@/%@/%@",
-                                  artworkThumbnailUrl.scheme, @"content6.flixster.com",
-                                  artworkThumbnailUrl.pathComponents[4],
-                                  artworkThumbnailUrl.pathComponents[5],
-                                  artworkThumbnailUrl.pathComponents[6],
-                                  artworkThumbnailUrl.pathComponents[7],
-                                  artworkThumbnailUrl.pathComponents[8]]];
-    
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 474)];
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:headerView.frame];
-    [imageView setImageWithURL:artworkThumbnailUrl];
-    [imageView setImageWithURL:artworkFullsizeUrl];
+    [imageView setImageWithURL:self.movie.artworkThumbnailUrl];
+    [imageView setImageWithURL:self.movie.artworkFullsizeUrl];
     
     //  Assessment requirement say "All" images should fade in when not cached yet.
     //  But the visual effect is rather unpleasant when we display first the thumbnail while loading the hi-res
     //  Replaced code below with line above to prevent that.
     //  [imageView fadeInImageView:artworkCell.artworkImageView
-    //                         url:artworkFullsizeUrl
+    //                         url:self.movie.artworkFullsizeUrl
     //                  errorImage:[UIImage imageNamed:@"error"]
     //            placeholderImage:nil];
 
@@ -219,7 +202,7 @@ static const NSInteger kMiscSectionId = 3;
 }
 
 
-#pragma mark - Utils
+#pragma - Utils
 
 - (NSNumberFormatter *)percentageFormatter {
     if (!_percentageFormatter) {
@@ -231,11 +214,11 @@ static const NSInteger kMiscSectionId = 3;
     return _percentageFormatter;
 }
 
-- (NSString *)durationFormatter:(NSString *)durationInMinutes {
-    int totalMinutes = [durationInMinutes intValue];
-    int minutes = totalMinutes % 60;
-    int hours = (totalMinutes / 60) % 60;
-    return [NSString stringWithFormat:@"%dhr.%02dmin.",hours, minutes];
+- (NSString *)durationFormatter:(NSInteger)duration {
+    NSInteger totalMinutes = duration;
+    NSInteger minutes = totalMinutes % 60;
+    NSInteger hours = (totalMinutes / 60) % 60;
+    return [NSString stringWithFormat:@"%dhr.%02dmin.",(int)hours, (int)minutes];
 }
 
 - (NSDateFormatter *)dateFormatter {
