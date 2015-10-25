@@ -30,7 +30,7 @@
 		4A78362F1BDB02F000B55EBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4A7836381BDB04E900B55EBA /* MovieSynopsisTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieSynopsisTableViewCell.h; sourceTree = "<group>"; };
 		4A7836391BDB04E900B55EBA /* MovieSynopsisTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieSynopsisTableViewCell.m; sourceTree = "<group>"; };
-		4A8D36B41BDAF7B700328B46 /* RottenTomatoes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RottenTomatoes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A8D36B41BDAF7B700328B46 /* Rotten 🍎.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rotten 🍎.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A8D36B81BDAF7B700328B46 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4A8D36BA1BDAF7B700328B46 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4A8D36BB1BDAF7B700328B46 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		4A8D36B51BDAF7B700328B46 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4A8D36B41BDAF7B700328B46 /* RottenTomatoes.app */,
+				4A8D36B41BDAF7B700328B46 /* Rotten 🍎.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -184,7 +184,7 @@
 			);
 			name = RottenTomatoes;
 			productName = RottenTomatoes;
-			productReference = 4A8D36B41BDAF7B700328B46 /* RottenTomatoes.app */;
+			productReference = 4A8D36B41BDAF7B700328B46 /* Rotten 🍎.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -398,7 +398,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.flochtililoch.RottenTomatoes;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Rotten 🍎";
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -414,7 +414,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.flochtililoch.RottenTomatoes;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Rotten 🍎";
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;

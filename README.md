@@ -26,7 +26,7 @@ Time spent: `18h00`
 - [ ] Implement segmented control to switch between list view and grid view.
 
 ### Walkthrough
-![Video Walkthrough](http://i.imgur.com/9d4fXIm.gif)
+![Video Walkthrough](WALKTHROUGH.gif)
 
 Credits
 ---------
