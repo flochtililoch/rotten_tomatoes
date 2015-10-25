@@ -11,17 +11,45 @@
 @interface Movies ()
 
 @property (strong, nonatomic) NSArray *movies;
+@property (strong, nonatomic) NSMutableArray *filteredMovies;
+@property (strong, nonatomic) NSMutableString *filter;
 
 @end
 
 @implementation Movies
 
-- (NSUInteger)count {
-    return [self.movies count];
+- (NSMutableArray *)filteredMovies {
+    if(!_filteredMovies) {
+        _filteredMovies = [[NSMutableArray alloc] init];
+    }
+    return _filteredMovies;
 }
 
-- (Movie *)objectAtIndex:(NSUInteger)index {
-    return [self.movies objectAtIndex:index];
+- (NSString *)filter {
+    if(!_filter) {
+        _filter = [[NSMutableString alloc] initWithString:@""];
+    }
+    return _filter;
+}
+
+- (NSUInteger)count {
+    return [self.filteredMovies count];
+}
+
+- (NSMutableArray *)filterWithString:(NSString *)filter {
+    [self.filteredMovies removeAllObjects];
+    for (Movie* movie in self.movies)
+    {
+        NSRange titleRange = [movie.title rangeOfString:filter options:NSCaseInsensitiveSearch];
+        if(titleRange.location != NSNotFound || [filter isEqualToString:@""]) {
+            [self.filteredMovies addObject:movie];
+        }
+    }
+    return self.filteredMovies;
+}
+
+- (Movie *)objectAtIndex:(NSUInteger)index{
+    return [self.filteredMovies objectAtIndex:index];
 }
 
 - (void)fetch:(void (^)())successHandler error:(void (^)())errorHandler {
@@ -48,6 +76,7 @@
                 [movies addObject:movie];
             }
             self.movies = movies;
+            [self filterWithString:@""];
 
             successHandler();
         } else {

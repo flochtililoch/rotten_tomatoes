@@ -17,4 +17,6 @@
 
 - (void)fetch:(void (^)())successHandler error:(void (^)())errorHandler;
 
+- (NSMutableArray *)filterWithString:(NSString *)filter;
+
 @end

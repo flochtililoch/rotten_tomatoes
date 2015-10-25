@@ -12,7 +12,7 @@
 #import "MovieDetailsViewController.h"
 #import "MovieTableViewCell.h"
 
-@interface MoviesViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface MoviesViewController ()<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
 // Outlets
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -35,9 +35,16 @@
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.searchBar.delegate = self;
 
     [self initUI];
     [self fetchMovies];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    MovieDetailsViewController *vc = [segue destinationViewController];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    [vc setMovie:[self.movies objectAtIndex:indexPath.row]];
 }
 
 
@@ -68,55 +75,6 @@
     };
     
     [self.movies fetch:successHandler error:errorHandler];
-}
-
-
-# pragma - UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.hasError == YES) {
-        return 1;
-    }
-    return self.movies.count;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.hasError == YES) {
-        return 30;
-        
-    }
-    return 130;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.hasError == YES) {
-        return [self.tableView dequeueReusableCellWithIdentifier:@"errorCell"];
-    }
-    
-    Movie *movie = [self.movies objectAtIndex:indexPath.row];
-    MovieTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"movieCell"];
-    
-    cell.titleLabel.text = movie.title;
-    cell.synopsisLabel.text = movie.synopsis;
-    [cell.criticsImageView setImage:[UIImage imageNamed: movie.criticsRatingImageName]];
-    [cell.audienceImageView setImage:[UIImage imageNamed: movie.audienceRatingImageName]];
-    [cell.artworkImageView fadeInImageView:cell.artworkImageView
-                                       url:movie.artworkThumbnailUrl
-                                errorImage:[UIImage imageNamed:@"error"]
-                          placeholderImage:nil];
-    
-    return cell;
-}
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    MovieDetailsViewController *vc = [segue destinationViewController];
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-    [vc setMovie:[self.movies objectAtIndex:indexPath.row]];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -160,6 +118,70 @@
         [_tableView addSubview:_refreshControl];
     }
     return _refreshControl;
+}
+
+
+# pragma - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.hasError == YES) {
+        return 1;
+    }
+    return self.movies.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.hasError == YES) {
+        return 30;
+        
+    }
+    return 130;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.hasError == YES) {
+        return [self.tableView dequeueReusableCellWithIdentifier:@"errorCell"];
+    }
+    
+    Movie *movie = [self.movies objectAtIndex:indexPath.row];
+    MovieTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"movieCell"];
+    
+    cell.titleLabel.text = movie.title;
+    cell.synopsisLabel.text = movie.synopsis;
+    [cell.criticsImageView setImage:[UIImage imageNamed: movie.criticsRatingImageName]];
+    [cell.audienceImageView setImage:[UIImage imageNamed: movie.audienceRatingImageName]];
+    [cell.artworkImageView fadeInImageView:cell.artworkImageView
+                                       url:movie.artworkThumbnailUrl
+                                errorImage:[UIImage imageNamed:@"error"]
+                          placeholderImage:nil];
+    
+    return cell;
+}
+
+
+# pragma - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.searchBar resignFirstResponder];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)scrollViewWillBeginDragging:(UITableView *)scrollView
+{
+    [self.searchBar resignFirstResponder];
+}
+
+
+# pragma - UISearchBarDelegate
+
+- (void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text {
+    [self.movies filterWithString:text];
+    [self.tableView reloadData];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [self.searchBar resignFirstResponder];
 }
 
 @end

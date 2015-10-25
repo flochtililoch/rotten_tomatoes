@@ -41,6 +41,35 @@ static const NSInteger kMiscSectionId = 3;
 }
 
 
+#pragma - UI
+
+- (void)initUI {
+    // Navigation
+    self.title = [self.movie.title stringByAppendingFormat:@" (%ld)",(long)self.movie.year];
+    
+    // Table
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 44.0;
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 474)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:headerView.frame];
+    [imageView setImageWithURL:self.movie.artworkThumbnailUrl];
+    [imageView setImageWithURL:self.movie.artworkFullsizeUrl];
+    
+    //  Assessment requirement say "All" images should fade in when not cached yet.
+    //  But the visual effect is rather unpleasant when we display first the thumbnail while loading the hi-res
+    //  Replaced code below with line above to prevent that.
+    //  [imageView fadeInImageView:artworkCell.artworkImageView
+    //                         url:self.movie.artworkFullsizeUrl
+    //                  errorImage:[UIImage imageNamed:@"error"]
+    //            placeholderImage:nil];
+    
+    [headerView addSubview:imageView];
+    self.tableView.tableHeaderView = headerView;
+}
+
+
+
 # pragma - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -171,34 +200,6 @@ static const NSInteger kMiscSectionId = 3;
         NSURL *url = [NSURL URLWithString:[@"https://en.wikipedia.org/wiki/" stringByAppendingString:urlReadyName]];
         [[UIApplication sharedApplication] openURL:url];
     }
-}
-
-
-#pragma - UI
-
-- (void)initUI {
-    // Navigation
-    self.title = self.movie.title;
-    
-    // Table
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 44.0;
-    
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 474)];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:headerView.frame];
-    [imageView setImageWithURL:self.movie.artworkThumbnailUrl];
-    [imageView setImageWithURL:self.movie.artworkFullsizeUrl];
-    
-    //  Assessment requirement say "All" images should fade in when not cached yet.
-    //  But the visual effect is rather unpleasant when we display first the thumbnail while loading the hi-res
-    //  Replaced code below with line above to prevent that.
-    //  [imageView fadeInImageView:artworkCell.artworkImageView
-    //                         url:self.movie.artworkFullsizeUrl
-    //                  errorImage:[UIImage imageNamed:@"error"]
-    //            placeholderImage:nil];
-
-    [headerView addSubview:imageView];
-    self.tableView.tableHeaderView = headerView;
 }
 
 
