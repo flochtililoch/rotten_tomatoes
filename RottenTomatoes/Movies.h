@@ -18,5 +18,6 @@
 - (void)fetch:(void (^)())successHandler error:(void (^)())errorHandler;
 
 - (NSMutableArray *)filterWithString:(NSString *)filter;
+- (NSMutableArray *)filterWithString:(NSString *)filter andDVDOnly:(BOOL)dvdOnly;
 
 @end

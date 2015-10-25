@@ -35,5 +35,6 @@
 @property (nonatomic) NSInteger year;
 
 - (instancetype)initWithNSDictionnary:(NSDictionary *)movie;
+- (BOOL)isAvailableInDVD;
 
 @end

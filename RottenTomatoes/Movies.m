@@ -38,11 +38,22 @@
 
 - (NSMutableArray *)filterWithString:(NSString *)filter {
     [self.filteredMovies removeAllObjects];
-    for (Movie* movie in self.movies)
-    {
+    for (Movie *movie in self.movies) {
         NSRange titleRange = [movie.title rangeOfString:filter options:NSCaseInsensitiveSearch];
         if(titleRange.location != NSNotFound || [filter isEqualToString:@""]) {
             [self.filteredMovies addObject:movie];
+        }
+    }
+    return self.filteredMovies;
+}
+
+- (NSMutableArray *)filterWithString:(NSString *)filter andDVDOnly:(BOOL)dvdOnly {
+    NSMutableArray *filteredMovies = [[NSMutableArray alloc] initWithArray:[self filterWithString:filter]];
+    if (dvdOnly == YES) {
+        for (Movie *movie in filteredMovies) {
+            if (![movie isAvailableInDVD]) {
+                [self.filteredMovies removeObject:movie];
+            }
         }
     }
     return self.filteredMovies;

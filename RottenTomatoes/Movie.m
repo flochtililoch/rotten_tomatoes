@@ -57,4 +57,8 @@
     return self;
 }
 
+- (BOOL)isAvailableInDVD {
+    return self.dvdReleaseDate != nil;
+}
+
 @end

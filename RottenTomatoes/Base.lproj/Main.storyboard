@@ -14,7 +14,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="24" sectionHeaderHeight="28" sectionFooterHeight="28" id="Tm3-1e-r9M">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -102,6 +102,22 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <tabBar contentMode="scaleToFill" itemPositioning="centered" id="xka-pX-Erf">
+                                <rect key="frame" x="0.0" y="519" width="320" height="49"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <items>
+                                    <tabBarItem title="" image="Box Office" id="m0L-d0-yMo">
+                                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                                    </tabBarItem>
+                                    <tabBarItem title="" image="DVD" id="9FF-ma-dYq">
+                                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                                    </tabBarItem>
+                                </items>
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="selectedImageTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            </tabBar>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -109,6 +125,7 @@
                     <navigationItem key="navigationItem" id="GJi-1o-AmD"/>
                     <connections>
                         <outlet property="searchBar" destination="Dns-LK-aJY" id="eAW-lL-BMZ"/>
+                        <outlet property="tabBar" destination="xka-pX-Erf" id="DDI-T1-ZIn"/>
                         <outlet property="tableView" destination="Tm3-1e-r9M" id="ooE-qp-DJI"/>
                     </connections>
                 </viewController>
@@ -244,4 +261,8 @@
             <point key="canvasLocation" x="173.33333333333334" y="366.36000000000001"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Box Office" width="40" height="40"/>
+        <image name="DVD" width="40" height="40"/>
+    </resources>
 </document>

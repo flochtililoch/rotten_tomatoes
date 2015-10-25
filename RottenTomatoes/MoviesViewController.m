@@ -12,11 +12,12 @@
 #import "MovieDetailsViewController.h"
 #import "MovieTableViewCell.h"
 
-@interface MoviesViewController ()<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+@interface MoviesViewController ()<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UITabBarDelegate>
 
 // Outlets
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UITabBar *tabBar;
 
 // UI
 @property (strong, nonatomic) UIActivityIndicatorView *loadingIndicator;
@@ -36,6 +37,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.searchBar.delegate = self;
+    self.tabBar.delegate = self;
 
     [self initUI];
     [self fetchMovies];
@@ -64,19 +66,25 @@
         [self.loadingIndicator stopAnimating];
         [self.refreshControl endRefreshing];
         self.hasError = NO;
-        [self.tableView reloadData];
+        [self filterMovies];
     };
     
     void (^errorHandler)() = ^void() {
         [self.loadingIndicator stopAnimating];
         [self.refreshControl endRefreshing];
         self.hasError = YES;
-        [self.tableView reloadData];
+        [self filterMovies];
     };
     
     [self.movies fetch:successHandler error:errorHandler];
 }
 
+- (void)filterMovies {
+    [self.movies filterWithString:self.searchBar.text
+                       andDVDOnly:self.tabBar.selectedItem == [self.tabBar.items objectAtIndex:1]];
+    [self.tableView reloadData];
+
+}
 
 # pragma - UI helpers
 
@@ -87,6 +95,11 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor darkGrayColor];
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];;
+    
+    // Tab bar
+    self.tabBar.backgroundColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1.0];
+    self.tabBar.tintColor = [UIColor blackColor];
+    [self.tabBar setSelectedItem:[self.tabBar.items objectAtIndex:0]];
     
     // Loading
     [self.loadingIndicator startAnimating];
@@ -176,12 +189,18 @@
 # pragma - UISearchBarDelegate
 
 - (void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text {
-    [self.movies filterWithString:text];
-    [self.tableView reloadData];
+    [self filterMovies];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [self.searchBar resignFirstResponder];
+}
+
+
+# pragma - UITabBarDelegate
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    [self filterMovies];
 }
 
 @end
