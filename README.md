@@ -32,3 +32,5 @@ Credits
 ---------
 * [Rotten Tomatoes API](http://developer.rottentomatoes.com/docs/read/JSON)
 * [AFNetworking](https://github.com/AFNetworking/AFNetworking)
+* Box Office icon created by Milky - Digital innovation from Noun Project
+* DVD icon created by Jamison Wieser from Noun Project
